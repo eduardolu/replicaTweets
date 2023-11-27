@@ -1,16 +1,16 @@
 import { v4 as uuidv4 } from "uuid";
-import { size } from "lodash";
+import { size, remove } from "lodash";
 import { TWEET } from "../utils/constants";
 
-export function seveTweet(tweet, username) {
+export function seveTweet(username, tweet) {
   const tweets = getTweetApi();
   if (size(tweets) === 0) {
     const tweetTemp = [
-      { id: uuidv4(), tweet, username, createdAt: new Date() },
+      { id: uuidv4(), username, tweet, createdAt: new Date() },
     ];
     localStorage.setItem(TWEET, JSON.stringify(tweetTemp));
   } else {
-    tweets.push({ id: uuidv4(), tweet, username, createdAt: new Date() });
+    tweets.push({ id: uuidv4(), username, tweet, createdAt: new Date() });
     localStorage.setItem(TWEET, JSON.stringify(tweets));
   }
 }
@@ -20,4 +20,12 @@ export function getTweetApi() {
     return JSON.parse(tweet);
   }
   return [];
+}
+
+export function deleteTweetApi(idTweet) {
+  const tweets = getTweetApi();
+  remove(tweets, function (tweet) {
+    return tweet.id === idTweet;
+  });
+  localStorage.setItem(TWEET, JSON.stringify(tweets));
 }

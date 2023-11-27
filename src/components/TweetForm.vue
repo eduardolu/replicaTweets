@@ -24,15 +24,20 @@ import { seveTweet } from "../api/tweet";
 export default {
   props: {
     showForm: Boolean,
+    reloadTweets: Function,
+    opencloseForm: Function,
   },
-  setup() {
+  setup(props) {
     let username = ref("");
     let tweet = ref("");
 
     const sendTweet = () => {
+      if (!username.value || !tweet.value) return;
       seveTweet(username.value, tweet.value);
       username.value = "";
       tweet.value = "";
+      props.reloadTweets();
+      props.opencloseForm();
     };
     return {
       sendTweet,
